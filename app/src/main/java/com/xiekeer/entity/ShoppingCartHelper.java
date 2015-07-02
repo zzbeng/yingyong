@@ -2,6 +2,8 @@ package com.xiekeer.entity;
 
 import android.content.res.Resources;
 
+import com.xiekeer.omgandroid.R;
+
 import java.util.List;
 import java.util.Vector;
 

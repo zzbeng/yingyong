@@ -1,4 +1,4 @@
-package com.xiekeer.omgandroid;
+package com.xiekeer.entity;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 //import com.squareup.picasso.Picasso;
+
+import com.xiekeer.omgandroid.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

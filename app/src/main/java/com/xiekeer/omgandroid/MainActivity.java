@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,14 +19,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.xiekeer.entity.JSONAdapter;
 
 import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
@@ -36,12 +30,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     EditText mainEditText;
     ListView mainListView;
     JSONAdapter mJSONAdapter;
-    ArrayList mNameList = new ArrayList();
     ShareActionProvider mShareActionProvider;
     private static final String PREFS = "prefs";
     private static final String PREF_NAME = "name";
     SharedPreferences mSharedPreferences;
-    private static final String QUERY_URL = "http://openlibrary.org/search.json?q=";
+
     ProgressDialog mDialog;
 
     @Override
@@ -69,12 +62,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         // 7. Greet the user, or ask for their name if new
         displayWelcome();
-
-        // 10. Create a JSONAdapter for the ListView
-        mJSONAdapter = new JSONAdapter(this, getLayoutInflater());
-
-        // Set the ListView to use the ArrayAdapter
-        mainListView.setAdapter(mJSONAdapter);
 
         mDialog = new ProgressDialog(this);
         mDialog.setMessage("Searching for Book");
@@ -123,7 +110,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         // 9. Take what was typed into the EditText and use in search
-        queryBooks(mainEditText.getText().toString());
+        //queryBooks(mainEditText.getText().toString());
     }
 
     @Override
@@ -201,55 +188,4 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
     }
 
-    private void queryBooks(String searchString) {
-
-        // Prepare your search string to be put in a URL
-        // It might have reserved characters or something
-        String urlString = "";
-        try {
-            urlString = URLEncoder.encode(searchString, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-
-            // if this fails for some reason, let the user know why
-            e.printStackTrace();
-            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
-        // Create a client to perform networking
-        AsyncHttpClient client = new AsyncHttpClient();
-
-        // Show ProgressDialog to inform user that a task in the background is occurring
-        mDialog.show();
-
-        // Have the client get a JSONArray of data
-        // and define how to respond
-        client.get(QUERY_URL + urlString,
-                new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(JSONObject jsonObject) {
-
-                        // 11. Dismiss the ProgressDialog
-                        mDialog.dismiss();
-
-                        // update the data in your custom method.
-                        mJSONAdapter.updateData(jsonObject.optJSONArray("docs"));
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Throwable throwable, JSONObject error) {
-
-                        // 11. Dismiss the ProgressDialog
-                        mDialog.dismiss();
-
-                        // Display a "Toast" message
-                        // to announce the failure
-                        Toast.makeText(getApplicationContext(), "Error: " + statusCode + " " + throwable.getMessage(), Toast.LENGTH_LONG).show();
-
-                        // Log error message
-                        // to help solve any problems
-                        Log.e("omg android", statusCode + " " + throwable.getMessage());
-                    }
-                });
-    }
 }
