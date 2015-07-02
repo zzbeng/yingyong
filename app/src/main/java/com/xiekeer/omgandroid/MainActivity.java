@@ -1,4 +1,4 @@
-package com.darrylbayliss.omgandroid;
+package com.xiekeer.omgandroid;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;

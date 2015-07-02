@@ -1,4 +1,4 @@
-package com.darrylbayliss.omgandroid;
+package com.xiekeer.omgandroid;
 
 import android.content.Context;
 import android.view.LayoutInflater;
